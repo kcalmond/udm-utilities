@@ -9,6 +9,8 @@
 
 1. You have successfully setup the on boot script described [here](https://github.com/boostchicken/udm-utilities/tree/master/on-boot-script)
 
+**MYCONFIG**: Also followed the next step (Container Common) to setup 05-container-common.sh 
+
 ## Customization
 
 * Feel free to change [20-dns.conflist](../cni-plugins/20-dns.conflist) to change the IP address and MAC address of the container.
@@ -18,14 +20,50 @@
 ## Steps
 
 1. On your controller, make a Corporate network with no DHCP server and give it a VLAN. For this example we are using VLAN 5.
+
+    **MYCONFIG**: My UDMP is running a single default corp network, setup as 192.168.0.1/24. For this step I added a new corp network on VLAN=5 as 192.168.1.254/24; DHCP=none. Left all other settings at default.
+
 2. Copy [20-dns.conflist](../cni-plugins/20-dns.conflist) to /mnt/data/podman/cni.  This will create your podman macvlan network
-3. Copy [10-dns.sh](../dns-common/on_boot.d/10-dns.sh) to /mnt/data/on_boot.d and update its values to reflect your environment
+
+    **MYCONFIG**: copy my_20-dns.conflist to /mnt/data/podman/cni/20-dns.conflist
+
+    Per [this comment](https://old.reddit.com/r/Ubiquiti/comments/lkwpox/following_boostchickens_awesome_config_for/gnnus3o/), I used https://macaddress.io/mac-address-generator to create a **registered** mac address for the "mac" value below:
+
+    ```
+    {
+      "cniVersion": "0.4.0",
+      "name": "dns",
+      "plugins": [
+        {
+          "type": "macvlan",
+          "mode": "bridge",
+          "master": "br5",
+          "mac": "24:bc:82:e7:07:d2",
+          "ipam": {
+            "type": "static",
+            "addresses": [
+              {
+                "address": "192.168.1.15/24",
+                "gateway": "192.168.1.1"
+              }
+            ],
+            "routes": [
+              {"dst": "0.0.0.0/0"}
+            ]
+          }
+        }
+      ]
+    }
+    ```
+
+
+3. Copy [10-dns.sh](../dns-common/on_boot.d/10-dns.sh) to /mnt/data/on_boot.d and update its values to reflect your environment (**MYCONFIG**: copy my_10-dns.sh to /mnt/data/on_boot.d/10-dns.sh)
 
    ```
    ...
    VLAN=5
-   IPV4_IP="10.0.5.3"
-   IPV4_GW="10.0.5.1/24"
+   IPV4_IP="192.168.1.15"
+   IPV4_GW="192.168.1.1/24"
    ...
    CONTAINER=pihole
    ...
@@ -71,5 +109,5 @@
     podman exec -it pihole pihole -a -p YOURNEWPASSHERE
     ```
 
-7. Update your DNS Servers to 10.0.5.3 (or your custom ip) for each of your Networks (UDM GUI | Networks | Advanced | DHCP Name Server)
-8. Access the pihole like you would normally, e.g. http://10.0.5.3 if using examples above
+7. Update your DNS Servers to 192.168.1.15 for each of your Networks (UDM GUI | Networks | Advanced | DHCP Name Server)
+8. Access the pihole like you would normally, e.g. http://192.168.1.15
