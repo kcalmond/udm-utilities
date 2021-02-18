@@ -9,7 +9,7 @@
 
 1. You have successfully setup the on boot script described [here](https://github.com/boostchicken/udm-utilities/tree/master/on-boot-script)
 
-**MYCONFIG**: Also followed the next step (Container Common) to setup 05-container-common.sh 
+**MYCONFIG**: Also followed the next step in the top-level README to setup 05-container-common.sh 
 
 ## Customization
 
