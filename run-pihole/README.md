@@ -95,6 +95,44 @@
         -e IPv6="False" \
         pihole/pihole:latest
     ```
+    Test customization for almond.lan:
+
+    ```sh
+    podman run -d --network dns --restart always \
+       --name pihole \
+       -e TZ="America/Los Angeles" \
+       -v "/mnt/data/etc-pihole/:/etc/pihole/" \
+       -v "/mnt/data/pihole/etc-dnsmasq.d/:/etc/dnsmasq.d/" \
+       --dns=127.0.0.1 \
+       --dns=1.1.1.1 \
+       --dns=8.8.8.8 \
+       --hostname udmpihole.almond.lan \
+       -e VIRTUAL_HOST="udmpihole.almond.lan" \
+       -e PROXY_LOCATION="udmpihole.almond.lan" \
+       -e ServerIP="192.168.1.15" \
+       -e IPv6="False" \
+       pihole/pihole:latest
+    ```
+    Test customization for pihole+unbound using cbcrowe image:
+
+    ```sh
+    podman run -d --network dns --restart always \
+    --name pihole \
+    -e TZ="America/Los_Angeles" \
+    -v "/mnt/data/etc-pihole/:/etc/pihole/" \
+    -v "/mnt/data/pihole/etc-dnsmasq.d/:/etc/dnsmasq.d/" \
+    -e DNS1=127.0.0.1#5335 \
+    -e DNS2=127.0.0.1#5335 \
+    -e DNSSEC=true \
+    --hostname udmpihole.almond.lan \
+    -e VIRTUAL_HOST="testpihole.almond.lan" \
+    -e PROXY_LOCATION="testpihole.almond.lan" \
+    -e REV_SERVER=true \
+    -e REV_SERVER_DOMAIN="almond.lan" \
+    -e REV_SERVER_TARGET="192.168.0.1" \
+    -e REV_SERVER_CIDR="192.168.0.0/16" \
+    cbcrowe/pihole-unbound:latest
+    ```
 
     The below errors are expected and acceptable
 
