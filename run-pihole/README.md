@@ -57,7 +57,9 @@
     ```
 
 
-3. Copy [10-dns.sh](../dns-common/on_boot.d/10-dns.sh) to /mnt/data/on_boot.d and update its values to reflect your environment (**MYCONFIG**: copy my_10-dns.sh to /mnt/data/on_boot.d/10-dns.sh)
+3. Copy [10-dns.sh](../dns-common/on_boot.d/10-dns.sh) to /mnt/data/on_boot.d and update its values to reflect your environment
+
+    **MYCONFIG**: copy my_10-dns.sh to /mnt/data/on_boot.d/10-dns.sh
 
    ```
    ...
@@ -125,8 +127,8 @@
     -e DNS2=127.0.0.1#5335 \
     -e DNSSEC=true \
     --hostname udmpihole.almond.lan \
-    -e VIRTUAL_HOST="testpihole.almond.lan" \
-    -e PROXY_LOCATION="testpihole.almond.lan" \
+    -e VIRTUAL_HOST="udmpihole.almond.lan" \
+    -e PROXY_LOCATION="udmpihole.almond.lan" \
     -e REV_SERVER=true \
     -e REV_SERVER_DOMAIN="almond.lan" \
     -e REV_SERVER_TARGET="192.168.0.1" \
